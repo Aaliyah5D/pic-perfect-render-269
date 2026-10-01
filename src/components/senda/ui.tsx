@@ -61,28 +61,59 @@ export function Card({ children, className }: { children: ReactNode; className?:
 export function LanguageSelector() {
   const { lang, setLang } = useI18n();
   return (
-    <div role="group" aria-label="Language" className="flex rounded-full border-2 border-border bg-card p-0.5 text-sm font-semibold">
-      {(Object.keys(LANGUAGES) as Lang[]).map((l) => (
-        <button
-          key={l}
-          onClick={() => setLang(l)}
-          aria-pressed={lang === l}
-          className={cn(
-            "min-h-9 rounded-full px-3",
-            lang === l ? "bg-primary text-primary-foreground" : "text-muted-foreground",
-          )}
-        >
-          {LANGUAGES[l].label}
-        </button>
-      ))}
-    </div>
+    <label className="relative shrink-0">
+      <span className="sr-only">Language</span>
+      <span aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm">
+        🌐
+      </span>
+      <select
+        value={lang}
+        onChange={(e) => setLang(e.target.value as Lang)}
+        className="min-h-11 appearance-none rounded-full border-2 border-border bg-card py-1 pl-9 pr-8 text-sm font-semibold outline-none focus-visible:border-primary"
+      >
+        {(Object.keys(LANGUAGES) as Lang[]).map((l) => (
+          <option key={l} value={l}>
+            {LANGUAGES[l].label}
+          </option>
+        ))}
+      </select>
+      <span aria-hidden className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+        ▾
+      </span>
+    </label>
+  );
+}
+
+export function Toggle({ label, on, onClick }: { label: string; on: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      onClick={onClick}
+      className={cn(
+        "inline-flex min-h-11 items-center gap-2 rounded-full border-2 px-3 text-sm font-semibold transition-colors",
+        on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground hover:border-input",
+      )}
+    >
+      <span
+        aria-hidden
+        className={cn(
+          "relative h-5 w-9 shrink-0 rounded-full transition-colors",
+          on ? "bg-accent" : "bg-input",
+        )}
+      >
+        <span className={cn("absolute top-0.5 h-4 w-4 rounded-full bg-card transition-all", on ? "left-4.5" : "left-0.5")} />
+      </span>
+      {label}
+    </button>
   );
 }
 
 export function Logo() {
   return (
     <Link to="/" className="flex items-center gap-2 text-xl font-extrabold tracking-tight" aria-label="Senda home">
-      <span aria-hidden className="grid h-9 w-9 place-items-center rounded-xl bg-accent text-accent-foreground">
+      <span aria-hidden className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground">
         ➜
       </span>
       Senda
