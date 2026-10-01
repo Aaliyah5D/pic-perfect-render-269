@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { fmt, type Country, type Quote, type Transfer, STATUS_FLOW } from "@/lib/api";
+import { useState } from "react";
+import { fmt, type Country, type FeeConfig, type Quote, type Transfer, STATUS_FLOW } from "@/lib/api";
 import { useI18n } from "@/lib/i18n";
 import { Card } from "./ui";
 
@@ -107,7 +108,7 @@ function Row({ label, value, strong }: { label: string; value: string; strong?: 
   );
 }
 
-export function FeeBreakdown({ quote, country }: { quote: Quote; country: Country }) {
+export function FeeBreakdown({ quote, country, feeConfig }: { quote: Quote; country: Country; feeConfig?: FeeConfig | undefined }) {
   const { t } = useI18n();
   return (
     <Card>
@@ -127,6 +128,7 @@ export function FeeBreakdown({ quote, country }: { quote: Quote; country: Countr
         </p>
       </div>
       <p className="mt-3 text-center text-sm font-semibold text-success">✓ {t("noHidden")}</p>
+      {feeConfig && <FeeWhy quote={quote} cfg={feeConfig} />}
     </Card>
   );
 }
@@ -144,7 +146,7 @@ const MSG_KEY = {
   COLLECTED: "msg_COLLECTED",
 } as const;
 
-export function StatusTracker({ status }: { status: Transfer["status"] }) {
+export function StatusTracker({ status, name, country }: { status: Transfer["status"]; name?: string; country?: string }) {
   const { t } = useI18n();
   const idx = STATUS_FLOW.indexOf(status);
   const finished = status === "COLLECTED";
@@ -152,6 +154,11 @@ export function StatusTracker({ status }: { status: Transfer["status"] }) {
     <div>
       <p role="status" aria-live="polite" className="mb-5 rounded-2xl bg-success-soft p-4 text-lg font-semibold">
         {t(MSG_KEY[status])}
+        {name && (
+          <span className="mt-1 block text-base font-normal text-muted-foreground">
+            {t(EXPL_KEY[status], { name, country: country ?? "" })}
+          </span>
+        )}
       </p>
       <ol className="space-y-0">
         {STATUS_FLOW.map((s, i) => {
@@ -172,7 +179,7 @@ export function StatusTracker({ status }: { status: Transfer["status"] }) {
                   {done ? "✓" : current ? "●" : "○"}
                 </span>
                 {i < STATUS_FLOW.length - 1 && (
-                  <span className={cn("my-1 w-0.5 flex-1 min-h-6", i < idx ? "bg-success" : "bg-border")} aria-hidden />
+                  <span className={cn("my-1 flex min-h-8 w-0.5 flex-1 justify-center", i < idx ? "bg-success" : "bg-border")} aria-hidden />
                 )}
               </div>
               <div className="pb-6 pt-1.5">
@@ -193,4 +200,120 @@ export function StatusTracker({ status }: { status: Transfer["status"] }) {
 
 export function statusLabelKey(s: Transfer["status"]) {
   return STATUS_KEY[s];
+}
+
+const EXPL_KEY = {
+  SENT: "expl_SENT",
+  IN_TRANSIT: "expl_IN_TRANSIT",
+  READY_TO_COLLECT: "expl_READY_TO_COLLECT",
+  COLLECTED: "expl_COLLECTED",
+} as const;
+const RV_KEY = {
+  SENT: "rv_SENT",
+  IN_TRANSIT: "rv_IN_TRANSIT",
+  READY_TO_COLLECT: "rv_READY_TO_COLLECT",
+  COLLECTED: "rv_COLLECTED",
+} as const;
+
+/** Explains the backend fee config. The fee total always comes from the backend quote. */
+export function FeeWhy({ quote, cfg }: { quote: Quote; cfg: FeeConfig }) {
+  const { t } = useI18n();
+  return (
+    <details className="group mt-3 rounded-2xl border-2 border-border p-1">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-xl px-3 font-semibold">
+        <span aria-hidden className="grid h-6 w-6 place-items-center rounded-full bg-secondary text-sm">ⓘ</span>
+        {t("whyFee")}
+        <span aria-hidden className="ml-auto transition-transform group-open:rotate-180">▾</span>
+      </summary>
+      <div className="space-y-1 px-3 pb-3 pt-1 text-base">
+        <p className="tabular">R {fmt(cfg.flat, 0)} {t("feeFixed")}</p>
+        <p className="tabular">+ {cfg.percent * 100}% {t("feeOfAmount")} (R {fmt(quote.amount)})</p>
+        <p className="tabular border-t border-border pt-1 font-bold">= R {fmt(quote.fee)} {t("fee").toLowerCase()}</p>
+        <p className="text-sm text-muted-foreground">{t("feeMinNote", { min: cfg.min })}</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-accent-foreground/70">{t("demoPricing")}</p>
+      </div>
+    </details>
+  );
+}
+
+/** Phone-style preview of what the recipient sees, driven by real transfer status. */
+export function RecipientPhone({ transfer }: { transfer: Transfer }) {
+  const { t } = useI18n();
+  const ready = transfer.status === "READY_TO_COLLECT";
+  return (
+    <figure className="space-y-3">
+      <div className="mx-auto w-full max-w-[18rem] rounded-[2.5rem] bg-primary p-3 shadow-[0_24px_48px_-20px_oklch(0.245_0.058_265/0.5)]">
+        <div className="overflow-hidden rounded-[2rem] bg-background">
+          <div className="flex items-center justify-between px-5 pt-3 text-xs font-semibold text-muted-foreground">
+            <span>9:41</span>
+            <span aria-hidden className="h-5 w-20 rounded-full bg-primary" />
+            <span aria-hidden>▮▮▮</span>
+          </div>
+          <div className="space-y-4 px-4 pb-6 pt-5">
+            <div className="flex items-center gap-2">
+              <span aria-hidden className="grid h-8 w-8 place-items-center rounded-lg bg-accent text-sm font-bold text-accent-foreground">➜</span>
+              <span className="text-sm font-extrabold tracking-[0.2em]">SENDA</span>
+              <span className="ml-auto text-xs text-muted-foreground">{t("rv_now")}</span>
+            </div>
+            <div key={transfer.status} className="animate-rise space-y-3 rounded-2xl bg-card p-4 shadow-sm">
+              <p className="text-lg font-bold leading-snug">
+                {t("rv_sent", { name: transfer.sender.name, amount: `${fmt(transfer.quote.receiveAmount)} ${transfer.quote.receiveCurrency}` })}
+              </p>
+              <p
+                role="status"
+                aria-live="polite"
+                className={cn(
+                  "rounded-xl px-3 py-2 text-base font-semibold",
+                  ready || transfer.status === "COLLECTED" ? "bg-success-soft text-success" : "bg-accent-soft",
+                )}
+              >
+                {t(RV_KEY[transfer.status])}
+              </p>
+              <div className="border-t border-border pt-2">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("reference")}</p>
+                <p className="font-mono text-lg font-bold">{transfer.id}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption className="text-center text-sm text-muted-foreground">{t("rv_caption", { name: transfer.recipient.name })}</figcaption>
+    </figure>
+  );
+}
+
+/** USSD presentation of a real transfer (simulation only). */
+export function UssdDemo({ transfer }: { transfer: Transfer }) {
+  const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="space-y-3 rounded-3xl border-2 border-dashed border-input p-4">
+      <div>
+        <p className="text-lg font-bold">📟 {t("ussdTitle")}</p>
+        <p className="text-sm text-muted-foreground">{t("ussdNote")}</p>
+      </div>
+      <div className="rounded-2xl bg-primary p-4 font-mono text-sm text-primary-foreground">
+        {!open ? (
+          <div className="space-y-1">
+            <p>SENDA (DEMO)</p>
+            <p>{t("ussdCheck")}</p>
+            <p>{t("ussdExit")}</p>
+          </div>
+        ) : (
+          <div className="space-y-1">
+            <p>{transfer.id}</p>
+            <p>{fmt(transfer.quote.receiveAmount)} {transfer.quote.receiveCurrency}</p>
+            <p>{t(RV_KEY[transfer.status])}</p>
+          </div>
+        )}
+      </div>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="min-h-11 w-full rounded-xl border-2 border-border bg-card font-mono font-semibold"
+      >
+        {open ? "0" : "1"} ↵
+      </button>
+    </div>
+  );
 }
