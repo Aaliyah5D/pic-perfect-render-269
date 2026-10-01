@@ -146,7 +146,7 @@ const MSG_KEY = {
   COLLECTED: "msg_COLLECTED",
 } as const;
 
-export function StatusTracker({ status, name, country }: { status: Transfer["status"]; name?: string; country?: string }) {
+export function StatusTracker({ status, name, country }: { status: Transfer["status"]; name?: string | undefined; country?: string | undefined }) {
   const { t } = useI18n();
   const idx = STATUS_FLOW.indexOf(status);
   const finished = status === "COLLECTED";
