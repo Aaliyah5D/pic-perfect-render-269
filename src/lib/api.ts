@@ -31,6 +31,8 @@ export type Transfer = {
   quote: Quote;
 };
 
+export type FeeConfig = { flat: number; percent: number; min: number };
+
 export class ApiError extends Error {
   constructor(public code: string, public status: number) {
     super(code);
@@ -50,7 +52,7 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
 export const api = {
   countries: () => req<{ countries: Country[] }>("/api/countries").then((r) => r.countries),
   rate: (currency: string, amount?: number) =>
-    req<{ rate: number; quote: Quote | null; limits: { min: number; max: number } }>(
+    req<{ rate: number; quote: Quote | null; limits: { min: number; max: number }; feeConfig?: FeeConfig }>(
       `/api/exchange-rates/${currency}${amount ? `?amount=${amount}` : ""}`,
     ),
   createTransfer: (data: {
