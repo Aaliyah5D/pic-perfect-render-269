@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 
 // UI preferences: Simple Mode (conversational copy) and Senda Lite (low-data, larger UI).
 type Prefs = { simple: boolean; lite: boolean };
-const Ctx = createContext<Prefs & { toggle: (k: keyof Prefs) => void }>(null as never);
+const Ctx = createContext<Prefs & { toggle: (k: keyof Prefs) => void }>({ simple: false, lite: false, toggle: () => {} });
 
 export function PrefsProvider({ children }: { children: ReactNode }) {
   const [p, setP] = useState<Prefs>({ simple: false, lite: false });

@@ -11,9 +11,18 @@ export const LANGUAGES = {
 export type Lang = keyof typeof LANGUAGES;
 export type TKey = keyof typeof en;
 
-const Ctx = createContext<{ lang: Lang; setLang: (l: Lang) => void; t: (k: TKey, vars?: Record<string, string | number>) => string }>(
-  null as never,
-);
+type I18n = { lang: Lang; setLang: (l: Lang) => void; t: (k: TKey, vars?: Record<string, string | number>) => string };
+// Safe English fallback so components never crash if rendered outside the provider (e.g. during hot reload).
+const fallback: I18n = {
+  lang: "en",
+  setLang: () => {},
+  t: (k, vars) => {
+    let s: string = en[k];
+    if (vars) for (const [key, v] of Object.entries(vars)) s = s.replaceAll(`{${key}}`, String(v));
+    return s;
+  },
+};
+const Ctx = createContext<I18n>(fallback);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("en");
