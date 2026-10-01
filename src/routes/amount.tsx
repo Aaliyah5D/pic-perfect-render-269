@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useFlow } from "@/lib/flow";
 import { useI18n } from "@/lib/i18n";
+import { usePrefs } from "@/lib/prefs";
 import { useQuote } from "@/lib/use-quote";
 import { Button, ErrorMessage, Screen } from "@/components/senda/ui";
 import { AmountInput, FeeBreakdown } from "@/components/senda/money";
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/amount")({
 function AmountPage() {
   const { t } = useI18n();
   const { draft, update } = useFlow();
+  const { simple } = usePrefs();
   const nav = useNavigate();
   const { dest, data, isError } = useQuote();
   const limits = data?.limits ?? { min: 50, max: 5000 };
@@ -28,7 +30,7 @@ function AmountPage() {
   const quote = !invalid && data?.quote && data.quote.amount === n ? data.quote : data?.quote && !invalid ? data.quote : null;
 
   return (
-    <Screen title={t("howMuch")} step={2} back="/send">
+    <Screen title={simple ? t("s_howMuch") : t("howMuch")} step={2} back="/send">
       <div className="space-y-2">
         <AmountInput label={t("youSend")} value={draft.amount} onChange={(v) => update({ amount: v })} error={invalid ? t("errAmount") : undefined} />
         <p className={invalid ? "text-sm font-medium text-destructive" : "text-sm text-muted-foreground"}>
@@ -37,7 +39,7 @@ function AmountPage() {
         </p>
       </div>
       {isError && <ErrorMessage>{t("errApi")}</ErrorMessage>}
-      {dest && quote && <FeeBreakdown quote={quote} country={dest} />}
+      {dest && quote && <FeeBreakdown quote={quote} country={dest} feeConfig={data?.feeConfig} />}
       <p className="text-center text-xs text-muted-foreground">{t("mockRate")}</p>
       <Button disabled={!quote || invalid || !draft.amount} onClick={() => nav({ to: "/recipient" })}>
         {t("continue")} →

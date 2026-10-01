@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { countriesQuery } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
 import { useI18n } from "@/lib/i18n";
+import { usePrefs } from "@/lib/prefs";
 import { Button, ErrorMessage, Field, Screen } from "@/components/senda/ui";
 
 export const Route = createFileRoute("/recipient")({
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/recipient")({
 function RecipientPage() {
   const { t } = useI18n();
   const { draft, update } = useFlow();
+  const { simple } = usePrefs();
   const nav = useNavigate();
   const { data } = useQuery(countriesQuery);
   const dest = data?.find((c) => c.code === draft.toCode);
@@ -32,7 +34,7 @@ function RecipientPage() {
   const err = (v: string) => (tried && !v.trim() ? t("errRecipient") : undefined);
 
   return (
-    <Screen title={t("whoTitle")} step={3} back="/amount">
+    <Screen title={simple ? t("s_who") : t("whoTitle")} step={3} back="/amount">
       <form
         className="space-y-4"
         noValidate
@@ -53,9 +55,13 @@ function RecipientPage() {
         </div>
         <Field id="rcity" label={t("city")} value={r.city} error={err(r.city)} onChange={(e) => update({ recipient: { ...r, city: e.target.value } })} />
 
+        {!simple && (
+          <>
         <h2 className="pt-4 text-xl font-bold">{t("yourDetails")}</h2>
         <Field id="sname" label={t("yourName")} autoComplete="name" value={s.name} error={err(s.name)} onChange={(e) => update({ sender: { ...s, name: e.target.value } })} />
         <Field id="scity" label={t("yourCity")} value={s.city} error={err(s.city)} onChange={(e) => update({ sender: { ...s, city: e.target.value } })} />
+          </>
+        )}
         <Button type="submit">{t("reviewTransfer")} →</Button>
       </form>
     </Screen>
