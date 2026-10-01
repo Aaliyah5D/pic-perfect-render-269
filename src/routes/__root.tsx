@@ -14,7 +14,9 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider } from "@/lib/i18n";
 import { FlowProvider } from "@/lib/flow";
-import { LanguageSelector, Logo } from "@/components/senda/ui";
+import { LanguageSelector, Logo, Toggle } from "@/components/senda/ui";
+import { PrefsProvider, usePrefs } from "@/lib/prefs";
+import { useI18n } from "@/lib/i18n";
 
 function NotFoundComponent() {
   return (
@@ -106,18 +108,39 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
-        <FlowProvider>
-          <div className="mx-auto flex min-h-screen w-full max-w-lg flex-col px-5 pb-10">
-            <header className="flex items-center justify-between py-4">
-              <Logo />
-              <LanguageSelector />
-            </header>
-            <main className="flex-1">
-              <Outlet />
-            </main>
-          </div>
-        </FlowProvider>
+        <PrefsProvider>
+          <FlowProvider>
+            <AppShell />
+          </FlowProvider>
+        </PrefsProvider>
       </I18nProvider>
     </QueryClientProvider>
+  );
+}
+
+function AppShell() {
+  const { t } = useI18n();
+  const { simple, lite, toggle } = usePrefs();
+  return (
+    <div className="mx-auto flex min-h-screen w-full max-w-lg flex-col overflow-x-hidden px-5 pb-10">
+      <header className="space-y-3 py-4">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <Logo />
+          <LanguageSelector />
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Toggle label={t("simpleMode")} on={simple} onClick={() => toggle("simple")} />
+          <Toggle label={t("liteMode")} on={lite} onClick={() => toggle("lite")} />
+          {lite && (
+            <span role="status" className="rounded-full bg-success-soft px-3 py-1 text-sm font-semibold text-success">
+              {t("liteBadge")}
+            </span>
+          )}
+        </div>
+      </header>
+      <main className="flex-1">
+        <Outlet />
+      </main>
+    </div>
   );
 }

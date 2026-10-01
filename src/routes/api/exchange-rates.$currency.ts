@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { buildQuote, calculateFee, getRate, MAX_AMOUNT, MIN_AMOUNT } from "@/lib/senda.server";
+import { buildQuote, calculateFee, FEE_CONFIG, getRate, MAX_AMOUNT, MIN_AMOUNT } from "@/lib/senda.server";
 
 // GET /api/exchange-rates/ZWG?amount=1000 → rate (+ full quote when amount given)
 export const Route = createFileRoute("/api/exchange-rates/$currency")({
@@ -17,6 +17,7 @@ export const Route = createFileRoute("/api/exchange-rates/$currency")({
           rate,
           limits: { min: MIN_AMOUNT, max: MAX_AMOUNT },
           quote,
+          feeConfig: FEE_CONFIG,
           feeFor: Number.isFinite(amount) ? calculateFee(amount) : null,
         });
       },

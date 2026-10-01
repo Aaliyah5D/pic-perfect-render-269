@@ -3,6 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
 import { useI18n } from "@/lib/i18n";
+import { usePrefs } from "@/lib/prefs";
+import { fmt } from "@/lib/api";
 import { useQuote } from "@/lib/use-quote";
 import { Button, buttonClass, Card, ErrorMessage, Screen } from "@/components/senda/ui";
 import { FeeBreakdown } from "@/components/senda/money";
@@ -22,6 +24,7 @@ export const Route = createFileRoute("/review")({
 function ReviewPage() {
   const { t } = useI18n();
   const { draft } = useFlow();
+  const { simple } = usePrefs();
   const nav = useNavigate();
   const { dest, countries, data } = useQuote();
   const origin = countries?.find((c) => c.code === draft.fromCode);
@@ -36,8 +39,17 @@ function ReviewPage() {
   });
 
   return (
-    <Screen title={t("reviewTitle")} step={4} back="/recipient">
-      {dest && data?.quote && <FeeBreakdown quote={data.quote} country={dest} />}
+    <Screen title={simple ? t("s_ready") : t("reviewTitle")} step={4} back="/recipient">
+      {simple && data?.quote && (
+        <Card className="space-y-3 text-2xl font-bold leading-snug">
+          <p className="tabular">{t("s_youPay", { amount: fmt(data.quote.total) })}</p>
+          <p className="tabular text-success">
+            {t("s_familyGets", { amount: `${fmt(data.quote.receiveAmount)} ${data.quote.receiveCurrency}` })}
+          </p>
+          <p>{t("s_ready")}</p>
+        </Card>
+      )}
+      {!simple && dest && data?.quote && <FeeBreakdown quote={data.quote} country={dest} feeConfig={data.feeConfig} />}
       <Card className="grid grid-cols-2 gap-4">
         <div>
           <p className="text-sm font-semibold text-muted-foreground">{t("from")}</p>

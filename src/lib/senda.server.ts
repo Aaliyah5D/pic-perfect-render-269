@@ -67,7 +67,7 @@ const MOCK_RATES: Record<string, number> = {
 export const getRate = (currencyCode: string) => MOCK_RATES[currencyCode.toUpperCase()];
 
 // ---- Fee service: flat fee + percentage, configurable ----
-const FEE_CONFIG = { flat: 15, percent: 0.02, min: 20 };
+export const FEE_CONFIG = { flat: 15, percent: 0.02, min: 20 };
 export const calculateFee = (amount: number) =>
   round2(Math.max(FEE_CONFIG.min, FEE_CONFIG.flat + amount * FEE_CONFIG.percent));
 

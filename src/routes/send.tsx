@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { countriesQuery } from "@/lib/api";
 import { useFlow } from "@/lib/flow";
 import { useI18n } from "@/lib/i18n";
+import { usePrefs } from "@/lib/prefs";
 import { Button, ErrorMessage, Screen } from "@/components/senda/ui";
 import { CountrySelector } from "@/components/senda/money";
 
@@ -21,13 +22,14 @@ export const Route = createFileRoute("/send")({
 function SendPage() {
   const { t } = useI18n();
   const { draft, update } = useFlow();
+  const { simple } = usePrefs();
   const nav = useNavigate();
   const { data, isError, isLoading, refetch } = useQuery(countriesQuery);
   const origins = data?.filter((c) => c.role === "origin") ?? [];
   const dests = data?.filter((c) => c.role === "destination") ?? [];
 
   return (
-    <Screen title={t("whereTitle")} step={1} back="/">
+    <Screen title={simple ? t("s_where") : t("whereTitle")} step={1} back="/">
       {isLoading && <p>{t("loading")}</p>}
       {isError && (
         <div className="space-y-3">
@@ -37,7 +39,7 @@ function SendPage() {
       )}
       {data && (
         <>
-          <CountrySelector label={t("sendingFrom")} countries={origins} value={draft.fromCode} onChange={(c) => update({ fromCode: c })} />
+          {!simple && <CountrySelector label={t("sendingFrom")} countries={origins} value={draft.fromCode} onChange={(c) => update({ fromCode: c })} />}
           <CountrySelector label={t("sendingTo")} countries={dests} value={draft.toCode} onChange={(c) => update({ toCode: c })} />
           <div className="sticky bottom-4">
             <Button onClick={() => nav({ to: "/amount" })} disabled={!draft.toCode}>
