@@ -1,8 +1,11 @@
+import { lazy, Suspense, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { api, fmt } from "@/lib/api";
 import { useI18n } from "@/lib/i18n";
-import { buttonClass, Card } from "@/components/senda/ui";
+import { Button, buttonClass, Card } from "@/components/senda/ui";
+
+const UssdSimulator = lazy(() => import("@/components/senda/ussd").then((m) => ({ default: m.UssdSimulator })));
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,6 +31,7 @@ function Home() {
     queryFn: () => api.rate(EXAMPLE.currency, EXAMPLE.amount),
   });
   const q = data?.quote;
+  const [ussd, setUssd] = useState(false);
   const features = [
     { icon: "➜", title: t("f_send"), d: t("f_sendD") },
     { icon: "👁", title: t("f_know"), d: t("f_knowD") },
@@ -103,6 +107,19 @@ function Home() {
           ))}
         </ol>
       </section>
+
+      <Card className="space-y-3 border-2 border-dashed border-input">
+        <p className="text-sm font-semibold text-muted-foreground">📱 No smartphone or data?</p>
+        <p className="text-2xl font-extrabold tracking-tight">Try Senda USSD</p>
+        <Button variant="secondary" onClick={() => setUssd(true)}>
+          Open USSD Demo
+        </Button>
+      </Card>
+      {ussd && (
+        <Suspense fallback={null}>
+          <UssdSimulator onClose={() => setUssd(false)} />
+        </Suspense>
+      )}
 
       <p className="text-center text-sm font-medium text-muted-foreground">{t("support")}</p>
     </div>
