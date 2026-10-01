@@ -1,8 +1,13 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import en from "@/locales/en";
 import sn from "@/locales/sn";
+import zu from "@/locales/zu";
 
-export const LANGUAGES = { en: { label: "English", dict: en }, sn: { label: "Shona", dict: sn } } as const;
+export const LANGUAGES = {
+  en: { label: "English", dict: en },
+  zu: { label: "isiZulu", dict: zu },
+  sn: { label: "Shona", dict: sn },
+} as const;
 export type Lang = keyof typeof LANGUAGES;
 export type TKey = keyof typeof en;
 
