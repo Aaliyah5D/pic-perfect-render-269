@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError, countriesQuery, fmt, STATUS_FLOW } from "@/lib/api";
 import { useI18n } from "@/lib/i18n";
 import { Button, Card, ErrorMessage, Screen } from "@/components/senda/ui";
-import { StatusTracker } from "@/components/senda/money";
+import { RecipientPhone, StatusTracker, UssdDemo } from "@/components/senda/money";
 
 export const Route = createFileRoute("/track/$id")({
   head: ({ params }) => ({
@@ -22,6 +23,7 @@ function TrackPage() {
   const { id } = Route.useParams();
   const { t } = useI18n();
   const qc = useQueryClient();
+  const [showRv, setShowRv] = useState(true);
   const { data: countries } = useQuery(countriesQuery);
   const { data: tr, error, isLoading } = useQuery({
     queryKey: ["transfer", id],
@@ -67,8 +69,12 @@ function TrackPage() {
             </dl>
           </Card>
           <Card>
-            <StatusTracker status={tr.status} />
+            <StatusTracker status={tr.status} name={tr.recipient.name} country={dest?.name} />
           </Card>
+          <Button variant="accent" onClick={() => setShowRv((v) => !v)} aria-expanded={showRv}>
+            📱 {showRv ? t("hideRecipientView") : t("recipientView")}
+          </Button>
+          {showRv && <RecipientPhone transfer={tr} />}
           {next && (
             <div className="space-y-2 rounded-2xl border-2 border-dashed border-input p-4">
               <p className="text-sm text-muted-foreground">{t("demoOnly")}</p>
@@ -78,6 +84,7 @@ function TrackPage() {
               </Button>
             </div>
           )}
+          <UssdDemo transfer={tr} />
         </>
       )}
     </Screen>
