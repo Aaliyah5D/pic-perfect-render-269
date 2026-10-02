@@ -26,7 +26,7 @@ function NotFoundComponent() {
         <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">This page doesn't exist.</p>
         <div className="mt-6">
-          <Link to="/" className="inline-flex min-h-12 items-center rounded-2xl bg-primary px-6 font-semibold text-primary-foreground">
+          <Link to="/" className="inline-flex min-h-[56px] items-center rounded-full bg-primary px-6 font-semibold text-primary-foreground shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-95">
             Go home
           </Link>
         </div>
@@ -51,11 +51,11 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
               router.invalidate();
               reset();
             }}
-            className="min-h-12 rounded-2xl bg-primary px-6 font-semibold text-primary-foreground"
+            className="min-h-[56px] rounded-full bg-primary px-6 font-semibold text-primary-foreground shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-95"
           >
             Try again
           </button>
-          <a href="/" className="inline-flex min-h-12 items-center rounded-2xl border-2 border-primary px-6 font-semibold">
+          <a href="/" className="inline-flex min-h-12 items-center rounded-full border-2 border-primary px-6 font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-95">
             Go home
           </a>
         </div>
