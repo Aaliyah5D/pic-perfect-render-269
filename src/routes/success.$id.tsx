@@ -47,26 +47,26 @@ function SuccessPage() {
       {isLoading && <p className="text-center">{t("loading")}</p>}
       {isError && <ErrorMessage>{t("errApi")}</ErrorMessage>}
       {tr && (
-        <Card className="animate-rise overflow-hidden p-0">
-          <div className="flex items-center justify-between bg-primary px-5 py-4 text-primary-foreground">
+         <Card className="animate-rise overflow-hidden p-0 sm:p-0">
+           <div className="flex items-center justify-between bg-primary px-6 py-4 text-primary-foreground sm:px-8">
             <div>
               <p className="text-sm font-extrabold tracking-[0.2em]">SENDA</p>
               <p className="text-xs uppercase tracking-wider opacity-80">{t("receiptTitle")}</p>
             </div>
             <span className="rounded-full bg-success px-3 py-1 text-sm font-bold text-success-foreground">✓ {t("status_SENT")}</span>
           </div>
-          <div className="space-y-1 px-5 pt-5">
+           <div className="space-y-1 px-6 pt-6 sm:px-8">
             <p className="text-sm font-semibold text-muted-foreground">{t("totalPaid")}</p>
             <p className="tabular text-4xl font-extrabold tracking-tight">R {fmt(tr.quote.total)}</p>
           </div>
-          <dl className="divide-y divide-border px-5 py-3">
+           <dl className="divide-y divide-border px-6 py-3 sm:px-8">
             <Line k={t("amountSent")} v={`R ${fmt(tr.quote.amount)}`} />
             <Line k={t("familyReceives")} v={`${fmt(tr.quote.receiveAmount)} ${tr.quote.receiveCurrency}`} highlight />
             <Line k={t("fee")} v={`R ${fmt(tr.quote.fee)}`} />
             <Line k={t("rate")} v={`1 ZAR = ${fmt(tr.quote.rate, tr.quote.rate < 10 ? 2 : 1)} ${tr.quote.receiveCurrency}`} />
             <Line k={t("status")} v={t(statusLabelKey(tr.status))} />
           </dl>
-          <div className="mx-5 mb-5 rounded-2xl border-2 border-dashed border-input p-4 text-center">
+           <div className="mx-6 mb-6 rounded-2xl border-2 border-dashed border-input p-4 text-center sm:mx-8">
             <p className="text-sm font-semibold text-muted-foreground">{t("reference")}</p>
             <p className="font-mono text-3xl font-extrabold tracking-wider">{tr.id}</p>
             <button

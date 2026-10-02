@@ -60,8 +60,8 @@ function Home() {
         </Link>
       </div>
 
-      <Card className="overflow-hidden p-0">
-        <div className="space-y-1 p-5">
+       <Card className="overflow-hidden p-0 sm:p-0">
+         <div className="space-y-1 p-6 sm:p-8">
           <p className="text-xs font-bold uppercase tracking-[0.15em] text-muted-foreground">{t("youPay")}</p>
           <p className="tabular text-4xl font-extrabold tracking-tight">{q ? `R${fmt(q.total, 0)}` : "—"}</p>
           {q && (
@@ -76,7 +76,7 @@ function Home() {
             ↓
           </span>
         </div>
-        <div className="space-y-1 bg-success-soft p-5 pt-7">
+         <div className="space-y-1 bg-success-soft p-6 pt-8 sm:p-8 sm:pt-10">
           <p className="text-xs font-bold uppercase tracking-[0.15em] text-success">{t("familyReceives")}</p>
           <p className="tabular text-4xl font-extrabold tracking-tight">
             {q ? fmt(q.receiveAmount) : "—"} <span className="text-xl">{q?.receiveCurrency}</span>{" "}
