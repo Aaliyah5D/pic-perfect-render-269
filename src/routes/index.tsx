@@ -40,7 +40,7 @@ function Home() {
   ];
 
   return (
-    <div className="flex flex-col gap-8 pt-4">
+    <div className="animate-in fade-in slide-in-from-bottom-4 flex flex-col gap-8 pt-4 duration-500 ease-out">
       <section className="space-y-4">
         <p className="inline-block rounded-full bg-accent-soft px-3 py-1 text-sm font-semibold">{t("sendAcross")}</p>
         <h1 className="text-5xl font-extrabold leading-[1.02] tracking-tight">
@@ -95,7 +95,7 @@ function Home() {
         </h2>
         <ol className="grid grid-cols-2 gap-3">
           {features.map((f, i) => (
-            <li key={f.title} className="rounded-2xl bg-card p-4">
+             <li key={f.title} className="rounded-3xl border border-border bg-card p-6 shadow-sm">
               <span aria-hidden className="mb-2 grid h-10 w-10 place-items-center rounded-xl bg-secondary text-lg lite:hidden">
                 {f.icon}
               </span>

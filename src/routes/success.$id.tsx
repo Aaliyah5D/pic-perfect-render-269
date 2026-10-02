@@ -39,7 +39,7 @@ function SuccessPage() {
   };
 
   return (
-    <div className="space-y-6 pt-2">
+    <div className="animate-in fade-in slide-in-from-bottom-4 space-y-6 pt-2 duration-500 ease-out">
       <div className="text-center">
         <h1 className="text-4xl font-extrabold tracking-tight">{t("sentTitle")}</h1>
         <p className="mt-2 text-lg text-muted-foreground">{t("sentLead")}</p>
@@ -72,7 +72,7 @@ function SuccessPage() {
             <button
               type="button"
               onClick={copy}
-              className="mt-2 min-h-11 rounded-full border-2 border-primary px-4 text-sm font-semibold"
+               className="mt-2 min-h-11 rounded-full border-2 border-primary px-4 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-95"
               aria-live="polite"
             >
               {copied ? t("copied") : `⧉ ${t("copyRef")}`}
