@@ -41,7 +41,7 @@
 :root {
   --radius: 1rem;
   /* Soft Cream #FFF9F5 */
-  --background: oklch(0.975 0.008 60);
+  --background: oklch(0.985 0.008 60);
   /* Deep Navy #14213D */
   --foreground: oklch(0.245 0.058 265);
   --card: oklch(1 0 0);
