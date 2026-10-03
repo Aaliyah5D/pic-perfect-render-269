@@ -5,7 +5,7 @@ import { useI18n, LANGUAGES, type Lang } from "@/lib/i18n";
 
 type BtnVariant = "primary" | "secondary" | "accent" | "ghost";
 const btnBase =
-  "inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl px-6 text-lg font-semibold transition-colors disabled:opacity-50 disabled:pointer-events-none";
+  "inline-flex min-h-[56px] w-full items-center justify-center gap-2 rounded-full px-6 text-lg font-semibold transition-all duration-200 shadow-md hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:opacity-50 disabled:pointer-events-none disabled:shadow-none disabled:hover:translate-y-0";
 const btnVariants: Record<BtnVariant, string> = {
   primary: "bg-primary text-primary-foreground hover:bg-primary/90",
   accent: "bg-accent text-accent-foreground hover:bg-accent/90",
@@ -34,7 +34,7 @@ export function Field({
         id={id}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-err` : undefined}
-        className="h-14 w-full rounded-xl border-2 border-input bg-card px-4 text-lg outline-none focus:border-primary aria-invalid:border-destructive"
+        className="h-14 w-full rounded-xl border-2 border-input bg-card px-4 text-lg outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 aria-invalid:border-destructive"
         {...p}
       />
       {error && (
@@ -92,7 +92,7 @@ export function Toggle({ label, on, onClick }: { label: string; on: boolean; onC
       aria-checked={on}
       onClick={onClick}
       className={cn(
-        "inline-flex min-h-11 items-center gap-2 rounded-full border-2 px-3 text-sm font-semibold transition-colors",
+        "inline-flex min-h-11 items-center gap-2 rounded-full border-2 px-3 text-sm font-semibold transition-all duration-200 active:scale-95",
         on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground hover:border-input",
       )}
     >

@@ -206,7 +206,7 @@ export function UssdSimulator({ onClose }: { onClose: () => void }) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="ussd-title"
-      className="fixed inset-0 z-50 overflow-y-auto bg-primary/70 p-4 backdrop-blur-sm"
+      className="animate-in fade-in fixed inset-0 z-50 overflow-y-auto bg-primary/70 p-4 duration-500 ease-out backdrop-blur-sm"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className="mx-auto flex min-h-full w-full max-w-sm flex-col items-center justify-center gap-4 py-4">
@@ -233,7 +233,7 @@ export function UssdSimulator({ onClose }: { onClose: () => void }) {
                 <ul className="mt-1 space-y-0.5">
                   {options.map(([k, label]) => (
                     <li key={k}>
-                      <button type="button" onClick={() => submit(k)} className="w-full rounded px-1 text-left hover:bg-foreground hover:text-background focus-visible:bg-foreground focus-visible:text-background">
+                      <button type="button" onClick={() => submit(k)} className="w-full cursor-pointer rounded-xl px-1 text-left transition-colors hover:bg-foreground hover:text-background focus-visible:bg-foreground focus-visible:text-background">
                         {k}. {label}
                       </button>
                     </li>
@@ -255,7 +255,7 @@ export function UssdSimulator({ onClose }: { onClose: () => void }) {
                     value={input}
                     onChange={(e) => setInput(e.target.value.slice(0, 12))}
                     inputMode={screen.s === "amount" ? "numeric" : "text"}
-                    className="mt-1 w-full border-b-2 border-foreground bg-transparent px-1 uppercase outline-none"
+                     className="mt-1 w-full border-b-2 border-foreground bg-transparent px-1 uppercase outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
                   />
                 </form>
               )}
@@ -264,10 +264,10 @@ export function UssdSimulator({ onClose }: { onClose: () => void }) {
 
           {/* Soft keys */}
           <div className="mt-3 grid grid-cols-2 gap-2">
-            <button type="button" onClick={() => (prompt ? setInput((i) => i.slice(0, -1)) : go({ s: "menu" }))} className="min-h-10 rounded-full bg-background/15 text-xs font-bold text-background">
+             <button type="button" onClick={() => (prompt ? setInput((i) => i.slice(0, -1)) : go({ s: "menu" }))} className="min-h-10 rounded-full bg-background/15 text-xs font-bold text-background transition-all duration-200 hover:bg-background/20 active:scale-95">
               {prompt ? "⌫ Clear" : "Menu"}
             </button>
-            <button type="button" disabled={busy || (!!prompt && !input)} onClick={() => submit(input)} className="min-h-10 rounded-full bg-accent text-xs font-bold text-accent-foreground disabled:opacity-50">
+             <button type="button" disabled={busy || (!!prompt && !input)} onClick={() => submit(input)} className="min-h-10 rounded-full bg-accent text-xs font-bold text-accent-foreground shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:opacity-50">
               Send
             </button>
           </div>
@@ -278,7 +278,7 @@ export function UssdSimulator({ onClose }: { onClose: () => void }) {
                 type="button"
                 onClick={() => press(k)}
                 disabled={busy}
-                className={cn("min-h-10 rounded-xl bg-background/10 font-mono text-lg font-bold text-background hover:bg-background/20")}
+                 className={cn("min-h-10 rounded-xl bg-background/10 font-mono text-lg font-bold text-background transition-all duration-200 hover:bg-background/20 active:scale-95")}
               >
                 {k}
               </button>
@@ -290,7 +290,7 @@ export function UssdSimulator({ onClose }: { onClose: () => void }) {
           <p className="font-mono font-bold">*120*SENDA#</p>
           <p className="opacity-90">Senda prototype USSD · DEMO — No real transaction</p>
         </div>
-        <button type="button" onClick={onClose} className="min-h-12 rounded-2xl bg-card px-6 font-semibold text-foreground">
+         <button type="button" onClick={onClose} className="min-h-12 rounded-full bg-card px-6 font-semibold text-foreground shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-95">
           Close USSD
         </button>
       </div>

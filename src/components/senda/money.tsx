@@ -27,7 +27,7 @@ export function CountrySelector({
             <label
               key={c.code}
               className={cn(
-                "flex min-h-16 cursor-pointer items-center gap-3 rounded-2xl border-2 bg-card px-4 transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-ring",
+                "flex min-h-16 cursor-pointer items-center gap-3 rounded-xl border-2 bg-card px-4 transition-colors hover:bg-muted has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-ring",
                 selected ? "border-primary" : "border-border hover:border-input",
                 disabled && "cursor-default",
               )}
@@ -79,7 +79,7 @@ export function AmountInput({
       </label>
       <div
         className={cn(
-          "flex items-baseline gap-2 rounded-3xl border-2 bg-card px-5 py-4 focus-within:border-primary",
+           "flex items-baseline gap-2 rounded-3xl border-2 bg-card px-5 py-4 transition-colors focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20",
           error ? "border-destructive" : "border-border",
         )}
       >
@@ -220,7 +220,7 @@ export function FeeWhy({ quote, cfg }: { quote: Quote; cfg: FeeConfig }) {
   const { t } = useI18n();
   return (
     <details className="group mt-3 rounded-2xl border-2 border-border p-1">
-      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-xl px-3 font-semibold">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-xl px-3 font-semibold transition-colors hover:bg-muted">
         <span aria-hidden className="grid h-6 w-6 place-items-center rounded-full bg-secondary text-sm">ⓘ</span>
         {t("whyFee")}
         <span aria-hidden className="ml-auto transition-transform group-open:rotate-180">▾</span>
@@ -255,7 +255,7 @@ export function RecipientPhone({ transfer }: { transfer: Transfer }) {
               <span className="text-sm font-extrabold tracking-[0.2em]">SENDA</span>
               <span className="ml-auto text-xs text-muted-foreground">{t("rv_now")}</span>
             </div>
-            <div key={transfer.status} className="animate-rise space-y-3 rounded-2xl bg-card p-4 shadow-sm">
+         <div key={transfer.status} className="animate-rise space-y-3 rounded-2xl border border-border bg-card p-4 shadow-sm">
               <p className="text-lg font-bold leading-snug">
                 {t("rv_sent", { name: transfer.sender.name, amount: `${fmt(transfer.quote.receiveAmount)} ${transfer.quote.receiveCurrency}` })}
               </p>
@@ -310,7 +310,7 @@ export function UssdDemo({ transfer }: { transfer: Transfer }) {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="min-h-11 w-full rounded-xl border-2 border-border bg-card font-mono font-semibold"
+         className="min-h-11 w-full rounded-xl border-2 border-border bg-card font-mono font-semibold transition-all duration-200 hover:bg-muted active:scale-95"
       >
         {open ? "0" : "1"} ↵
       </button>

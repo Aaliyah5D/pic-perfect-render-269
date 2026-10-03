@@ -28,7 +28,7 @@ function TrackSearch() {
           if (id.trim()) nav({ to: "/track/$id", params: { id: id.trim().toUpperCase() } });
         }}
       >
-        <Field id="tid" label={t("enterId")} placeholder="SND-XXXXXX" value={id} onChange={(e) => setId(e.target.value)} className="h-14 w-full rounded-xl border-2 border-input bg-card px-4 font-mono text-xl uppercase outline-none focus:border-primary" />
+         <Field id="tid" label={t("enterId")} placeholder="SND-XXXXXX" value={id} onChange={(e) => setId(e.target.value)} className="h-14 w-full rounded-xl border-2 border-input bg-card px-4 font-mono text-xl uppercase outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20" />
         <Button type="submit" disabled={!id.trim()}>
           {t("find")}
         </Button>
