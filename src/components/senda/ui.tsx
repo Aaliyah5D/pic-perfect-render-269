@@ -55,7 +55,7 @@ export function ErrorMessage({ children }: { children: ReactNode }) {
 }
 
 export function Card({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn("rounded-3xl bg-card p-5 shadow-[0_1px_2px_oklch(0.245_0.058_265/0.06),0_8px_24px_-12px_oklch(0.245_0.058_265/0.18)]", className)}>{children}</div>;
+  return <div className={cn("glass-surface rounded-3xl bg-card p-5 shadow-[0_1px_2px_oklch(0.245_0.058_265/0.06),0_8px_24px_-12px_oklch(0.245_0.058_265/0.18)]", className)}>{children}</div>;
 }
 
 export function LanguageSelector() {
@@ -69,7 +69,7 @@ export function LanguageSelector() {
       <select
         value={lang}
         onChange={(e) => setLang(e.target.value as Lang)}
-        className="min-h-11 appearance-none rounded-full border-2 border-border bg-card py-1 pl-9 pr-8 text-sm font-semibold outline-none focus-visible:border-primary"
+        className="language-select min-h-11 appearance-none rounded-full border-2 border-border bg-card py-1 pl-9 pr-8 text-sm font-semibold outline-none focus-visible:border-primary"
       >
         {(Object.keys(LANGUAGES) as Lang[]).map((l) => (
           <option key={l} value={l}>
@@ -112,8 +112,8 @@ export function Toggle({ label, on, onClick }: { label: string; on: boolean; onC
 
 export function Logo() {
   return (
-    <Link to="/" className="flex items-center gap-2 text-xl font-extrabold tracking-tight" aria-label="Senda home">
-      <span aria-hidden className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground">
+    <Link to="/" className="logo-link flex items-center gap-2 text-xl font-extrabold tracking-tight" aria-label="Senda home">
+      <span aria-hidden className="logo-mark grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground">
         ➜
       </span>
       Senda
@@ -134,7 +134,7 @@ export function Screen({
 }) {
   const { t } = useI18n();
   return (
-    <div className="space-y-6">
+    <div className="flow-screen space-y-6">
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           {back ? (

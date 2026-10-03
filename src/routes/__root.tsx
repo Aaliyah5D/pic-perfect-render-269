@@ -69,7 +69,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "theme-color", content: "#FFF9F5" },
+      { name: "theme-color", content: "#f4512a" },
       { title: "Senda — Send money home. Simply." },
       { name: "description", content: "Clear fees, simple transfers from South Africa to family across Africa." },
       { property: "og:type", content: "website" },
@@ -77,7 +77,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/senda-icon.svg", type: "image/svg+xml" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" },
@@ -122,13 +122,21 @@ function AppShell() {
   const { t } = useI18n();
   const { simple, lite, toggle } = usePrefs();
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-lg flex-col overflow-x-hidden px-5 pb-10">
-      <header className="space-y-3 py-4">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+    <div className="app-shell mx-auto flex min-h-screen w-full flex-col overflow-x-hidden px-5 pb-10">
+      <header className="site-header">
+        <div className="site-header-inner">
           <Logo />
-          <LanguageSelector />
+          <nav aria-label="Main navigation" className="site-nav">
+            <Link to="/send">Send money</Link>
+            <Link to="/track">Track transfer</Link>
+            <a href="#why-senda">Why Senda?</a>
+          </nav>
+          <div className="site-header-actions">
+            <LanguageSelector />
+            <Link to="/send" className="header-cta">Get started <span aria-hidden>→</span></Link>
+          </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="preference-bar" aria-label="Display preferences">
           <Toggle label={t("simpleMode")} on={simple} onClick={() => toggle("simple")} />
           <Toggle label={t("liteMode")} on={lite} onClick={() => toggle("lite")} />
           {lite && (
@@ -138,9 +146,14 @@ function AppShell() {
           )}
         </div>
       </header>
-      <main className="flex-1">
+      <main className="site-main flex-1">
         <Outlet />
       </main>
+      <footer className="site-footer">
+        <Logo />
+        <p>Made for the people who matter most.</p>
+        <Link to="/track">Track a transfer <span aria-hidden>→</span></Link>
+      </footer>
     </div>
   );
 }

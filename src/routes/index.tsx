@@ -40,79 +40,94 @@ function Home() {
   ];
 
   return (
-    <div className="flex flex-col gap-8 pt-4">
-      <section className="space-y-4">
-        <p className="inline-block rounded-full bg-accent-soft px-3 py-1 text-sm font-semibold">{t("sendAcross")}</p>
-        <h1 className="text-5xl font-extrabold leading-[1.02] tracking-tight">
-          {t("heroA")}
-          <br />
-          <span className="text-accent lite:text-foreground">{t("heroB")}</span>
-        </h1>
-        <p className="text-lg text-muted-foreground">{t("homeLead")}</p>
-      </section>
-
-      <div className="space-y-3">
-        <Link to="/send" className={buttonClass("primary")}>
-          {t("sendMoney")} →
-        </Link>
-        <Link to="/track" className={buttonClass("secondary")}>
-          {t("trackTransfer")}
-        </Link>
-      </div>
-
-      <Card className="overflow-hidden p-0">
-        <div className="space-y-1 p-5">
-          <p className="text-xs font-bold uppercase tracking-[0.15em] text-muted-foreground">{t("youPay")}</p>
-          <p className="tabular text-4xl font-extrabold tracking-tight">{q ? `R${fmt(q.total, 0)}` : "—"}</p>
-          {q && (
-            <p className="tabular text-muted-foreground">
-              R{fmt(q.amount, 0)} {t("sentWord")} · R{fmt(q.fee, 0)} {t("feeWord")}
-            </p>
-          )}
-          {isError && <p className="text-sm text-destructive">{t("errApi")}</p>}
-        </div>
-        <div className="relative h-0 border-t-2 border-dashed border-border">
-          <span aria-hidden className="absolute left-1/2 top-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-accent text-lg font-bold text-accent-foreground">
-            ↓
-          </span>
-        </div>
-        <div className="space-y-1 bg-success-soft p-5 pt-7">
-          <p className="text-xs font-bold uppercase tracking-[0.15em] text-success">{t("familyReceives")}</p>
-          <p className="tabular text-4xl font-extrabold tracking-tight">
-            {q ? fmt(q.receiveAmount) : "—"} <span className="text-xl">{q?.receiveCurrency}</span>{" "}
-            <span aria-hidden className="text-2xl">{EXAMPLE.flag}</span>
-          </p>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 pt-1 text-sm font-semibold text-success">
-            <span>✓ {t("rateLocked")}</span>
-            <span>✓ {t("noHidden")}</span>
+    <div className="home-page">
+      <section className="hero-panel">
+        <div className="hero-copy">
+          <p className="hero-eyebrow"><span aria-hidden className="hero-eyebrow-dot" /> {t("sendAcross")}</p>
+          <h1>
+            {t("heroA")}
+            <br />
+            <span>{t("heroB")}</span>
+          </h1>
+          <p className="hero-lead">{t("homeLead")}</p>
+          <div className="hero-actions">
+            <Link to="/send" className={buttonClass("primary", "hero-cta hero-cta-primary")}>
+              {t("sendMoney")} <span aria-hidden>→</span>
+            </Link>
+            <Link to="/track" className={buttonClass("secondary", "hero-cta hero-cta-secondary")}>
+              <span className="track-icon" aria-hidden>⌖</span> {t("trackTransfer")}
+            </Link>
+          </div>
+          <div className="hero-proof">
+            <span className="proof-avatars" aria-hidden><i>T</i><i>M</i><i>+</i></span>
+            <span><strong>Made for your people</strong><small>Every transfer, a little closer to home</small></span>
           </div>
         </div>
-      </Card>
 
-      <section aria-labelledby="families" className="space-y-3">
-        <h2 id="families" className="text-2xl font-extrabold tracking-tight">
-          {t("madeFor")}
-        </h2>
-        <ol className="grid grid-cols-2 gap-3">
+        <Card className="quote-card">
+          <div className="quote-heading">
+            <span className="quote-icon" aria-hidden>↗</span>
+            <div>
+              <p className="quote-kicker">YOUR TRANSFER</p>
+              <h2>A clear rate. No surprises.</h2>
+            </div>
+            <span className="live-pill"><i /> LIVE</span>
+          </div>
+          <div className="quote-amount">
+            <div>
+              <p>{t("youPay")}</p>
+              <strong>{q ? `R${fmt(q.total, 0)}` : "—"}</strong>
+              {q && <small>R{fmt(q.amount, 0)} {t("sentWord")} · R{fmt(q.fee, 0)} {t("feeWord")}</small>}
+            </div>
+            <span className="quote-arrow" aria-hidden>↓</span>
+            <div className="receive-amount">
+              <p>{t("familyReceives")}</p>
+              <strong>{q ? fmt(q.receiveAmount) : "—"} <span>{q?.receiveCurrency}</span> <i aria-hidden>{EXAMPLE.flag}</i></strong>
+              <small>Direct to your loved ones</small>
+            </div>
+          </div>
+          <div className="quote-foot">
+            <span><b aria-hidden>✓</b> {t("rateLocked")}</span>
+            <span><b aria-hidden>✓</b> {t("noHidden")}</span>
+          </div>
+          {isError && <p className="quote-error">{t("errApi")}</p>}
+        </Card>
+        <span className="hero-orb hero-orb-one" aria-hidden />
+        <span className="hero-orb hero-orb-two" aria-hidden />
+      </section>
+
+      <section id="why-senda" aria-labelledby="families" className="features-section">
+        <div className="section-heading">
+          <div>
+            <p className="section-kicker">MORE THAN A TRANSFER</p>
+            <h2 id="families">{t("madeFor")}</h2>
+          </div>
+          <p>Simple, secure ways to show up for the people you love.</p>
+        </div>
+        <ol className="feature-grid">
           {features.map((f, i) => (
-            <li key={f.title} className="rounded-2xl bg-card p-4">
-              <span aria-hidden className="mb-2 grid h-10 w-10 place-items-center rounded-xl bg-secondary text-lg lite:hidden">
+            <li key={f.title} className="feature-card">
+              <span aria-hidden className="feature-icon lite:hidden">
                 {f.icon}
               </span>
-              <p className="font-bold">
-                {i + 1}. {f.title}
-              </p>
-              <p className="text-sm text-muted-foreground">{f.d}</p>
+              <span className="feature-number">0{i + 1}</span>
+              <p className="feature-title">{f.title}</p>
+              <p className="feature-description">{f.d}</p>
+              <span className="feature-arrow" aria-hidden>↗</span>
             </li>
           ))}
         </ol>
       </section>
 
-      <Card className="space-y-3 border-2 border-dashed border-input">
-        <p className="text-sm font-semibold text-muted-foreground">📱 No smartphone or data?</p>
-        <p className="text-2xl font-extrabold tracking-tight">Try Senda USSD</p>
-        <Button variant="secondary" onClick={() => setUssd(true)}>
-          Open USSD Demo
+      <Card className="ussd-card">
+        <div className="ussd-symbol" aria-hidden>⌘</div>
+        <div className="ussd-copy">
+          <p className="section-kicker">NO SMARTPHONE? NO PROBLEM.</p>
+          <h2>Stay connected, anywhere.</h2>
+          <p>Send money with a simple USSD menu, even without data.</p>
+        </div>
+        <Button variant="secondary" className="ussd-button" onClick={() => setUssd(true)}>
+          Open USSD demo <span aria-hidden>→</span>
         </Button>
       </Card>
       {ussd && (
@@ -121,7 +136,7 @@ function Home() {
         </Suspense>
       )}
 
-      <p className="text-center text-sm font-medium text-muted-foreground">{t("support")}</p>
+      <p className="support-note">{t("support")}</p>
     </div>
   );
 }
